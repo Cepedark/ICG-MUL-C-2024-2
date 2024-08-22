@@ -40,13 +40,13 @@
       <option value="rectangulo">Rectángulo</option>
       <option value="triangulo">Triángulo</option>
       <option value="circulo">Círculo</option>
+      <option value="poligono">Polígono</option>
     </select>
   </div>
   <div>
     <label for="coordenadas">Selecciona el tipo de coordenadas:</label>
     <select id="coordenadas">
       <option value="cartesianas">Coordenadas Cartesianas</option>
-      <option value="polares">Coordenadas Polares</option>
     </select>
   </div>
   <div id="datosCuadradoRectangulo">
@@ -77,6 +77,16 @@
     <label for="radio">Radio:</label>
     <input type="text" id="radio">
   </div>
+  <div id="datosPoligono" class="hidden">
+    <label for="centroPoligonoX">Centro X:</label>
+    <input type="text" id="centroPoligonoX">
+    <label for="centroPoligonoY">Centro Y:</label>
+    <input type="text" id="centroPoligonoY">
+    <label for="lados">Número de lados:</label>
+    <input type="text" id="lados">
+    <label for="longitudLado">Longitud del lado:</label>
+    <input type="text" id="longitudLado">
+  </div>
   <div>
     <label for="colorBorde">Selecciona el color del borde:</label>
     <div id="colorBorde" class="color-buttons">
@@ -103,133 +113,10 @@
   </div>
   <canvas id="canvas" width="500" height="500"></canvas>
 
-  <script>
-    let colorBordeSeleccionado = 'black';
-    let colorInteriorSeleccionado = 'black';
-
-    document.getElementById('colorBorde').addEventListener('click', (e) => {
-      if (e.target.classList.contains('color-button')) {
-        colorBordeSeleccionado = e.target.getAttribute('data-color');
-      }
-    });
-
-    document.getElementById('colorInterior').addEventListener('click', (e) => {
-      if (e.target.classList.contains('color-button')) {
-        colorInteriorSeleccionado = e.target.getAttribute('data-color');
-      }
-    });
-
-    document.getElementById('figura').addEventListener('change', () => {
-      const figura = document.getElementById('figura').value;
-      document.getElementById('datosCuadradoRectangulo').classList.add('hidden');
-      document.getElementById('datosTriangulo').classList.add('hidden');
-      document.getElementById('datosCirculo').classList.add('hidden');
-
-      if (figura === 'cuadrado' || figura === 'rectangulo') {
-        document.getElementById('datosCuadradoRectangulo').classList.remove('hidden');
-      } else if (figura === 'triangulo') {
-        document.getElementById('datosTriangulo').classList.remove('hidden');
-      } else if (figura === 'circulo') {
-        document.getElementById('datosCirculo').classList.remove('hidden');
-      }
-    });
-
-    document.getElementById('dibujar').addEventListener('click', () => {
-      const figura = document.getElementById('figura').value;
-      const coordenadas = document.getElementById('coordenadas').value;
-      const canvas = document.getElementById('canvas');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.strokeStyle = colorBordeSeleccionado;
-      ctx.fillStyle = colorInteriorSeleccionado;
-
-      if (coordenadas === 'cartesianas') {
-        switch (figura) {
-          case 'cuadrado':
-            const coord1 = parseFloat(document.getElementById('coord1').value);
-            const coord2 = parseFloat(document.getElementById('coord2').value);
-            ctx.beginPath();
-            ctx.rect(coord1, coord2, 100, 100);
-            ctx.stroke();
-            ctx.fill();
-            break;
-          case 'rectangulo':
-            const rectCoord1 = parseFloat(document.getElementById('coord1').value);
-            const rectCoord2 = parseFloat(document.getElementById('coord2').value);
-            ctx.beginPath();
-            ctx.rect(rectCoord1, rectCoord2, 150, 100);
-            ctx.stroke();
-            ctx.fill();
-            break;
-          case 'triangulo':
-            const triX1 = parseFloat(document.getElementById('triX1').value);
-            const triY1 = parseFloat(document.getElementById('triY1').value);
-            const triX2 = parseFloat(document.getElementById('triX2').value);
-            const triY2 = parseFloat(document.getElementById('triY2').value);
-            const triX3 = parseFloat(document.getElementById('triX3').value);
-            const triY3 = parseFloat(document.getElementById('triY3').value);
-            ctx.beginPath();
-            ctx.moveTo(triX1, triY1);
-            ctx.lineTo(triX2, triY2);
-            ctx.lineTo(triX3, triY3);
-            ctx.closePath();
-            ctx.stroke();
-            ctx.fill();
-            break;
-          case 'circulo':
-            const centroX = parseFloat(document.getElementById('centroX').value);
-            const centroY = parseFloat(document.getElementById('centroY').value);
-            const radio = parseFloat(document.getElementById('radio').value);
-            ctx.beginPath();
-            ctx.arc(centroX, centroY, radio, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.fill();
-            break;
-        }
-      } else if (coordenadas === 'polares') {
-        // Implementación simplificada para coordenadas polares, convierte a cartesianas
-        const x = coord1 * Math.cos(coord2 * Math.PI / 180);
-        const y = coord1 * Math.sin(coord2 * Math.PI / 180);
-
-        switch (figura) {
-          case 'cuadrado':
-            ctx.beginPath();
-            ctx.rect(x + canvas.width / 2, y + canvas.height / 2, 100, 100);
-            ctx.stroke();
-            ctx.fill();
-            break;
-          case 'rectangulo':
-            ctx.beginPath();
-            ctx.rect(x + canvas.width / 2, y + canvas.height / 2, 150, 100);
-            ctx.stroke();
-            ctx.fill();
-            break;
-          case 'triangulo':
-            ctx.beginPath();
-            ctx.moveTo(x + canvas.width / 2, y + canvas.height / 2);
-            ctx.lineTo(x + canvas.width / 2 + 100, y + canvas.height / 2);
-            ctx.lineTo(x + canvas.width / 2 + 50, y + canvas.height / 2 - 100);
-            ctx.closePath();
-            ctx.stroke();
-            ctx.fill();
-            break;
-          case 'circulo':
-            ctx.beginPath();
-            ctx.arc(x + canvas.width / 2, y + canvas.height / 2, 50, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.fill();
-            break;
-        }
-      }
-    });
-
-    document.getElementById('reiniciar').addEventListener('click', () => {
-      const canvas = document.getElementById('canvas');
-      const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    });
-  </script>
+  <!-- Archivo JavaScript -->
+  <script src="figuras2D.js"></script>
 </body>
 </html>
+
+
 
