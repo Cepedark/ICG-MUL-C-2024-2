@@ -47,9 +47,12 @@
     <label for="coordenadas">Selecciona el tipo de coordenadas:</label>
     <select id="coordenadas">
       <option value="cartesianas">Coordenadas Cartesianas</option>
+      <option value="polares">Coordenadas Polares</option>
     </select>
   </div>
-  <div id="datosCuadradoRectangulo">
+  
+  <!-- Datos para coordenadas cartesianas -->
+  <div id="datosCuadradoRectangulo" class="hidden">
     <label for="coord1">Coordenada X:</label>
     <input type="text" id="coord1">
     <label for="coord2">Coordenada Y:</label>
@@ -87,6 +90,15 @@
     <label for="longitudLado">Longitud del lado:</label>
     <input type="text" id="longitudLado">
   </div>
+
+  <!-- Datos para coordenadas polares -->
+  <div id="datosPolares" class="hidden">
+    <label for="radioPolar">Radio (r):</label>
+    <input type="text" id="radioPolar">
+    <label for="anguloPolar">Ángulo (θ en grados):</label>
+    <input type="text" id="anguloPolar">
+  </div>
+
   <div>
     <label for="colorBorde">Selecciona el color del borde:</label>
     <div id="colorBorde" class="color-buttons">
@@ -117,6 +129,7 @@
   <script src="figuras2D.js"></script>
 </body>
 </html>
+
 
 
 
