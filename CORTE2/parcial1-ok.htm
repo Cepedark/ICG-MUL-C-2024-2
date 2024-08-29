@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polígono Regular</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid #000;
+        }
+        .input-group {
+            margin: 10px 0;
+        }
+        label {
+            margin-right: 10px;
+        }
+        input {
+            width: 100px;
+        }
+        button {
+            margin-top: 10px;
+        }
+        #resultados {
+            margin-top: 20px;
+            text-align: left;
+        }
+        #resultados p {
+            margin: 5px 0;
+        }
+        .option-group {
+            margin-bottom: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Polígono Regular</h1>
+    <h2>Ingrese los valores solicitados, elija el tipo de medida (apotema o lado) y proporcione el valor correspondiente.</h2>
+    
+    <div class="input-group">
+        <label for="numLados">Número de Lados:</label>
+        <input type="number" id="numLados" min="3" required>
+    </div>
+
+    <div class="option-group">
+        <label>Seleccione el tipo de medida:</label>
+        <input type="radio" id="medidaApotema" name="tipoMedida" value="apotema">
+        <label for="medidaApotema">Apotema</label>
+        <input type="radio" id="medidaLado" name="tipoMedida" value="lado">
+        <label for="medidaLado">Lado</label>
+    </div>
+
+    <div class="input-group hidden" id="inputApotema">
+        <label for="apotema">Apotema:</label>
+        <input type="number" id="apotema" step="0.1">
+    </div>
+
+    <div class="input-group hidden" id="inputLado">
+        <label for="lado">Lado:</label>
+        <input type="number" id="lado" step="0.1">
+    </div>
+
+    <div class="input-group">
+        <label for="centroX">Centro X:</label>
+        <input type="number" id="centroX" step="0.1">
+    </div>
+    <div class="input-group">
+        <label for="centroY">Centro Y:</label>
+        <input type="number" id="centroY" step="0.1">
+    </div>
+
+    <button onclick="ejecutarDibujo()">Dibujar Polígono</button>
+    <button onclick="limpiarCanvas()">Limpiar Canvas</button>
+    <canvas id="miCanvas" width="500" height="500"></canvas>
+    <div id="resultados">
+        <h2>Resultados:</h2>
+        <div id="coordenadas"></div>
+        <p id="anguloInterno"></p>
+    </div>
+
+    <script src="parcial1-ok.js"></script>
+</body>
+</html>
