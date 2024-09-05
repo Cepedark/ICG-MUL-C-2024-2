@@ -15,13 +15,31 @@ document.addEventListener('DOMContentLoaded', () => {
 // Clase para coordenadas cartesianas
 class Cartesiana {
     constructor(x, y) {
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
     }
 
+    // Métodos getter y setter
+    get x() {
+        return this._x;
+    }
+
+    set x(value) {
+        this._x = value;
+    }
+
+    get y() {
+        return this._y;
+    }
+
+    set y(value) {
+        this._y = value;
+    }
+
+    // Conversión a coordenadas polares
     aPolar() {
-        const r = Math.sqrt(this.x ** 2 + this.y ** 2);
-        const theta = Math.atan2(this.y, this.x) * (180 / Math.PI); // En grados
+        const r = Math.sqrt(this._x ** 2 + this._y ** 2);
+        const theta = Math.atan2(this._y, this._x) * (180 / Math.PI); // En grados
         return new Polar(r, theta);
     }
 }
@@ -29,13 +47,31 @@ class Cartesiana {
 // Clase para coordenadas polares
 class Polar {
     constructor(r, theta) {
-        this.r = r;
-        this.theta = theta;
+        this._r = r;
+        this._theta = theta;
     }
 
+    // Métodos getter y setter
+    get r() {
+        return this._r;
+    }
+
+    set r(value) {
+        this._r = value;
+    }
+
+    get theta() {
+        return this._theta;
+    }
+
+    set theta(value) {
+        this._theta = value;
+    }
+
+    // Conversión a coordenadas cartesianas
     aCartesiana() {
-        const x = this.r * Math.cos(this.theta * (Math.PI / 180));
-        const y = this.r * Math.sin(this.theta * (Math.PI / 180));
+        const x = this._r * Math.cos(this._theta * (Math.PI / 180));
+        const y = this._r * Math.sin(this._theta * (Math.PI / 180));
         return new Cartesiana(x, y);
     }
 }
@@ -87,7 +123,8 @@ function dibujarPoligono(numLados, apotema, lado, centroX, centroY, tipoMedida) 
     for (let i = 0; i < numLados; i++) {
         const x = centroX + radio * Math.cos(i * angulo - anguloBaseHorizontal);
         const y = centroY + radio * Math.sin(i * angulo - anguloBaseHorizontal);
-        vertices.push(new Cartesiana(x, y));
+        const vertice = new Cartesiana(x, y); // Crear objeto Cartesiana
+        vertices.push(vertice);
         if (i === 0) {
             ctx.moveTo(x, y);
         } else {
@@ -112,8 +149,7 @@ function mostrarResultados(vertices, numLados) {
     vertices.forEach((v, i) => {
         const x = v.x.toFixed(2);
         const y = v.y.toFixed(2);
-
-        const polar = v.aPolar();
+        const polar = v.aPolar(); // Conversión a coordenadas polares
 
         coordenadasDiv.innerHTML += `<p>Vértice ${i + 1}: (x: ${x}, y: ${y}) | Polar: (r: ${polar.r.toFixed(2)}, θ: ${polar.theta.toFixed(2)}°)</p>`;
     });
