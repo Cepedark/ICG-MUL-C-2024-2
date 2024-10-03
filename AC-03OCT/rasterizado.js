@@ -3,16 +3,16 @@ class Punto {
     #y; // Propiedad privada
 
     constructor(x, y) {
-        this.#x = x;
-        this.#y = y;
+        this.#x = x; // Usar la propiedad privada
+        this.#y = y; // Usar la propiedad privada
     }
 
     get x() {
-        return this.#x;
+        return this.#x; // Acceso a la propiedad privada
     }
 
     get y() {
-        return this.#y;
+        return this.#y; // Acceso a la propiedad privada
     }
 }
 
@@ -20,25 +20,7 @@ class Poligono {
     #puntos; // Propiedad privada
 
     constructor(puntos) {
-        this.#puntos = this.ordenarPuntos(puntos); // Usar la propiedad privada
-    }
-
-    // Método para calcular el centroide
-    calcularCentroide(puntos) {
-        const sumaX = puntos.reduce((acc, punto) => acc + punto.x, 0);
-        const sumaY = puntos.reduce((acc, punto) => acc + punto.y, 0);
-        const n = puntos.length;
-        return new Punto(sumaX / n, sumaY / n);
-    }
-
-    // Método para ordenar puntos en sentido antihorario
-    ordenarPuntos(puntos) {
-        const centroide = this.calcularCentroide(puntos);
-        return puntos.sort((a, b) => {
-            const anguloA = Math.atan2(a.y - centroide.y, a.x - centroide.x);
-            const anguloB = Math.atan2(b.y - centroide.y, b.x - centroide.x);
-            return anguloA - anguloB; // Ordenar de menor a mayor (sentido antihorario)
-        });
+        this.#puntos = puntos; // Usar la propiedad privada
     }
 
     #esConvexo() { // Método privado
@@ -59,6 +41,7 @@ class Poligono {
         return this.#esConvexo() ? "Convexo" : "Cóncavo";
     }
 
+    // Dibujar en formato rasterizado
     dibujar(context) {
         context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Limpiar el canvas
         context.beginPath();
@@ -71,6 +54,24 @@ class Poligono {
         context.lineWidth = 2;
         context.stroke();
     }
+}
+
+// Funciones personalizadas
+
+function calcularCentroide(puntos) {
+    const sumaX = puntos.reduce((acc, punto) => acc + punto.x, 0);
+    const sumaY = puntos.reduce((acc, punto) => acc + punto.y, 0);
+    const n = puntos.length;
+    return new Punto(sumaX / n, sumaY / n);
+}
+
+function ordenarPuntos(puntos) {
+    const centroide = calcularCentroide(puntos);
+    return puntos.sort((a, b) => {
+        const anguloA = Math.atan2(a.y - centroide.y, a.x - centroide.x);
+        const anguloB = Math.atan2(b.y - centroide.y, b.x - centroide.x);
+        return anguloA - anguloB; // Ordenar en sentido antihorario
+    });
 }
 
 // Función para generar un punto aleatorio dentro del canvas
@@ -87,6 +88,7 @@ function generarPoligonoAleatorio(n, ancho, alto) {
     for (let i = 0; i < n; i++) {
         puntos.push(generarPuntoAleatorio(ancho, alto));
     }
+    puntos = ordenarPuntos(puntos); // Ordenar puntos
     return new Poligono(puntos);
 }
 

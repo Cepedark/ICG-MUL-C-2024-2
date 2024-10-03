@@ -21,16 +21,13 @@ class Poligono {
 
     constructor(puntos) {
         this.#puntos = puntos; // Usar la propiedad privada
-        this.#ordenarPuntos(); // Ordenar puntos al crear el polígono
     }
 
-    // Método para ordenar puntos en sentido antihorario
+    // Método privado para ordenar puntos en sentido antihorario
     #ordenarPuntos() {
-        // Calcular el centroide
-        const centroideX = this.#puntos.reduce((suma, punto) => suma + punto.x, 0) / this.#puntos.length;
-        const centroideY = this.#puntos.reduce((suma, punto) => suma + punto.y, 0) / this.#puntos.length;
+        const centroideX = calcularCentroideX(this.#puntos);
+        const centroideY = calcularCentroideY(this.#puntos);
 
-        // Ordenar los puntos en función del ángulo respecto al centroide
         this.#puntos.sort((a, b) => {
             const anguloA = Math.atan2(a.y - centroideY, a.x - centroideX);
             const anguloB = Math.atan2(b.y - centroideY, b.x - centroideX);
@@ -53,31 +50,36 @@ class Poligono {
     }
 
     tipoPoligono() {
+        this.#ordenarPuntos(); // Ordenar antes de determinar el tipo
         return this.#esConvexo() ? "Convexo" : "Cóncavo";
     }
 
     // Dibujar en formato vectorizado
     dibujar(svgElement) {
-        // Limpiar cualquier polígono previo
+        this.#ordenarPuntos(); // Asegurarse de que los puntos estén ordenados
         while (svgElement.firstChild) {
             svgElement.removeChild(svgElement.firstChild);
         }
 
-        // Crear el elemento <polygon> para el polígono
         let poligonoSVG = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
-        
-        // Generar los puntos en formato "x1,y1 x2,y2 x3,y3..."
         let puntosString = this.#puntos.map(punto => `${punto.x},${punto.y}`).join(" ");
-        
-        // Definir atributos del polígono SVG
         poligonoSVG.setAttribute("points", puntosString);
         poligonoSVG.setAttribute("stroke", "red");
         poligonoSVG.setAttribute("fill", "none");
         poligonoSVG.setAttribute("stroke-width", "2");
 
-        // Agregar el polígono al SVG
         svgElement.appendChild(poligonoSVG);
     }
+}
+
+// Funciones personalizadas
+
+function calcularCentroideX(puntos) {
+    return puntos.reduce((suma, punto) => suma + punto.x, 0) / puntos.length;
+}
+
+function calcularCentroideY(puntos) {
+    return puntos.reduce((suma, punto) => suma + punto.y, 0) / puntos.length;
 }
 
 // Función para generar un punto aleatorio dentro del SVG
@@ -94,7 +96,8 @@ function generarPoligonoAleatorio(n, ancho, alto) {
     for (let i = 0; i < n; i++) {
         puntos.push(generarPuntoAleatorio(ancho, alto));
     }
-    return new Poligono(puntos);
+    const poligono = new Poligono(puntos);
+    return poligono;
 }
 
 // Obtener el elemento SVG
@@ -102,7 +105,6 @@ const svgElement = document.getElementById('svg');
 
 // Función para generar y dibujar un nuevo polígono
 function generarNuevoPoligono() {
-    // Generar un polígono aleatorio con entre 3 y 10 vértices
     const numVertices = Math.floor(Math.random() * 8) + 3; // Entre 3 y 10
     const poligono = generarPoligonoAleatorio(numVertices, svgElement.clientWidth, svgElement.clientHeight);
 
@@ -115,4 +117,3 @@ function generarNuevoPoligono() {
 
 // Generar un primer polígono al cargar la página
 document.addEventListener('DOMContentLoaded', generarNuevoPoligono);
-
