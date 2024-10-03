@@ -1,31 +1,36 @@
 class Punto {
+    #x; // Propiedad privada
+    #y; // Propiedad privada
+
     constructor(x, y) {
-        this._x = x;
-        this._y = y;
+        this.#x = x;
+        this.#y = y;
     }
 
     get x() {
-        return this._x;
+        return this.#x;
     }
 
     get y() {
-        return this._y;
+        return this.#y;
     }
 }
 
 class Poligono {
+    #puntos; // Propiedad privada
+
     constructor(puntos) {
-        this.puntos = puntos;
+        this.#puntos = puntos; // Usar la propiedad privada
     }
 
-    esConvexo() {
-        const n = this.puntos.length;
+    #esConvexo() { // Método privado
+        const n = this.#puntos.length;
         let signos = [];
         for (let i = 0; i < n; i++) {
-            const dx1 = this.puntos[(i + 1) % n].x - this.puntos[i].x;
-            const dy1 = this.puntos[(i + 1) % n].y - this.puntos[i].y;
-            const dx2 = this.puntos[(i + 2) % n].x - this.puntos[(i + 1) % n].x;
-            const dy2 = this.puntos[(i + 2) % n].y - this.puntos[(i + 1) % n].y;
+            const dx1 = this.#puntos[(i + 1) % n].x - this.#puntos[i].x;
+            const dy1 = this.#puntos[(i + 1) % n].y - this.#puntos[i].y;
+            const dx2 = this.#puntos[(i + 2) % n].x - this.#puntos[(i + 1) % n].x;
+            const dy2 = this.#puntos[(i + 2) % n].y - this.#puntos[(i + 1) % n].y;
             const cruz = dx1 * dy2 - dy1 * dx2;
             signos.push(Math.sign(cruz));
         }
@@ -33,16 +38,15 @@ class Poligono {
     }
 
     tipoPoligono() {
-        return this.esConvexo() ? "Convexo" : "Cóncavo";
+        return this.#esConvexo() ? "Convexo" : "Cóncavo";
     }
 
-    //Dibujar en el canvas formato rasterizado
     dibujar(context) {
         context.clearRect(0, 0, context.canvas.width, context.canvas.height); // Limpiar el canvas
         context.beginPath();
-        context.moveTo(this.puntos[0].x, this.puntos[0].y);
-        for (let i = 1; i < this.puntos.length; i++) {
-            context.lineTo(this.puntos[i].x, this.puntos[i].y);
+        context.moveTo(this.#puntos[0].x, this.#puntos[0].y);
+        for (let i = 1; i < this.#puntos.length; i++) {
+            context.lineTo(this.#puntos[i].x, this.#puntos[i].y);
         }
         context.closePath();
         context.strokeStyle = 'red';

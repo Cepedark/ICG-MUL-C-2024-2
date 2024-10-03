@@ -1,31 +1,36 @@
 class Punto {
+    #x; // Propiedad privada
+    #y; // Propiedad privada
+
     constructor(x, y) {
-        this._x = x;
-        this._y = y;
+        this.#x = x; // Usar la propiedad privada
+        this.#y = y; // Usar la propiedad privada
     }
 
     get x() {
-        return this._x;
+        return this.#x; // Acceso a la propiedad privada
     }
 
     get y() {
-        return this._y;
+        return this.#y; // Acceso a la propiedad privada
     }
 }
 
 class Poligono {
+    #puntos; // Propiedad privada
+
     constructor(puntos) {
-        this.puntos = puntos;
+        this.#puntos = puntos; // Usar la propiedad privada
     }
 
-    esConvexo() {
-        const n = this.puntos.length;
+    #esConvexo() { // Método privado
+        const n = this.#puntos.length;
         let signos = [];
         for (let i = 0; i < n; i++) {
-            const dx1 = this.puntos[(i + 1) % n].x - this.puntos[i].x;
-            const dy1 = this.puntos[(i + 1) % n].y - this.puntos[i].y;
-            const dx2 = this.puntos[(i + 2) % n].x - this.puntos[(i + 1) % n].x;
-            const dy2 = this.puntos[(i + 2) % n].y - this.puntos[(i + 1) % n].y;
+            const dx1 = this.#puntos[(i + 1) % n].x - this.#puntos[i].x;
+            const dy1 = this.#puntos[(i + 1) % n].y - this.#puntos[i].y;
+            const dx2 = this.#puntos[(i + 2) % n].x - this.#puntos[(i + 1) % n].x;
+            const dy2 = this.#puntos[(i + 2) % n].y - this.#puntos[(i + 1) % n].y;
             const cruz = dx1 * dy2 - dy1 * dx2;
             signos.push(Math.sign(cruz));
         }
@@ -33,10 +38,10 @@ class Poligono {
     }
 
     tipoPoligono() {
-        return this.esConvexo() ? "Convexo" : "Cóncavo";
+        return this.#esConvexo() ? "Convexo" : "Cóncavo";
     }
 
-    // Dibujar en formato vectorizado SVG
+    // Dibujar en formato vectorizado
     dibujar(svgElement) {
         // Limpiar cualquier polígono previo
         while (svgElement.firstChild) {
@@ -47,7 +52,7 @@ class Poligono {
         let poligonoSVG = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
         
         // Generar los puntos en formato "x1,y1 x2,y2 x3,y3..."
-        let puntosString = this.puntos.map(punto => `${punto.x},${punto.y}`).join(" ");
+        let puntosString = this.#puntos.map(punto => `${punto.x},${punto.y}`).join(" ");
         
         // Definir atributos del polígono SVG
         poligonoSVG.setAttribute("points", puntosString);
@@ -95,4 +100,3 @@ function generarNuevoPoligono() {
 
 // Generar un primer polígono al cargar la página
 document.addEventListener('DOMContentLoaded', generarNuevoPoligono);
-
