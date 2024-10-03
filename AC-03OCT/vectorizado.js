@@ -21,6 +21,21 @@ class Poligono {
 
     constructor(puntos) {
         this.#puntos = puntos; // Usar la propiedad privada
+        this.#ordenarPuntos(); // Ordenar puntos al crear el polígono
+    }
+
+    // Método para ordenar puntos en sentido antihorario
+    #ordenarPuntos() {
+        // Calcular el centroide
+        const centroideX = this.#puntos.reduce((suma, punto) => suma + punto.x, 0) / this.#puntos.length;
+        const centroideY = this.#puntos.reduce((suma, punto) => suma + punto.y, 0) / this.#puntos.length;
+
+        // Ordenar los puntos en función del ángulo respecto al centroide
+        this.#puntos.sort((a, b) => {
+            const anguloA = Math.atan2(a.y - centroideY, a.x - centroideX);
+            const anguloB = Math.atan2(b.y - centroideY, b.x - centroideX);
+            return anguloA - anguloB; // Ordenar en sentido antihorario
+        });
     }
 
     #esConvexo() { // Método privado
@@ -100,3 +115,4 @@ function generarNuevoPoligono() {
 
 // Generar un primer polígono al cargar la página
 document.addEventListener('DOMContentLoaded', generarNuevoPoligono);
+

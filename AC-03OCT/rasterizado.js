@@ -20,7 +20,25 @@ class Poligono {
     #puntos; // Propiedad privada
 
     constructor(puntos) {
-        this.#puntos = puntos; // Usar la propiedad privada
+        this.#puntos = this.ordenarPuntos(puntos); // Usar la propiedad privada
+    }
+
+    // Método para calcular el centroide
+    calcularCentroide(puntos) {
+        const sumaX = puntos.reduce((acc, punto) => acc + punto.x, 0);
+        const sumaY = puntos.reduce((acc, punto) => acc + punto.y, 0);
+        const n = puntos.length;
+        return new Punto(sumaX / n, sumaY / n);
+    }
+
+    // Método para ordenar puntos en sentido antihorario
+    ordenarPuntos(puntos) {
+        const centroide = this.calcularCentroide(puntos);
+        return puntos.sort((a, b) => {
+            const anguloA = Math.atan2(a.y - centroide.y, a.x - centroide.x);
+            const anguloB = Math.atan2(b.y - centroide.y, b.x - centroide.x);
+            return anguloA - anguloB; // Ordenar de menor a mayor (sentido antihorario)
+        });
     }
 
     #esConvexo() { // Método privado
