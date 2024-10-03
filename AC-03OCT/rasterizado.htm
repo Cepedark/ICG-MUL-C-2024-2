@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador Aleatorio de Polígonos</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+        }
+        #tipoPoligono {
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Poligonos Aleatorios</h1>
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <div id="tipoPoligono"></div>
+    <button onclick="generarNuevoPoligono()">Generar Nuevo Polígono</button>
+
+    <script src="rasterizado.js"></script>
+</body>
+</html>

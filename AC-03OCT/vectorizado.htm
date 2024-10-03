@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador Aleatorio de Polígonos (SVG)</title>
+    <style>
+        svg {
+            border: 1px solid black;
+            display: block;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Poligonos Aleatorios</h1>
+    <svg id="svg" width="500" height="500"></svg>
+    <div id="tipoPoligono"></div>
+    <button onclick="generarNuevoPoligono()">Generar Nuevo Polígono</button>
+
+    <script src="vectorizado.js"></script>
+</body>
+</html>
