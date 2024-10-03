@@ -14,8 +14,8 @@ class SVGCanvas {
 }
 
 class Punto {
-    #x; 
-    #y; 
+    #x;
+    #y;
 
     constructor(x, y) {
         this.#x = x;
@@ -31,17 +31,17 @@ class Punto {
     }
 
     draw(svgCanvas) {
-        svgCanvas.createElement("circle", { 
-            cx: this.#x, cy: this.#y, r: 2, 
+        svgCanvas.createElement("circle", {
+            cx: this.#x, cy: this.#y, r: 2,
             fill: "black"
         });
     }
 }
 
 class Linea {
-    #punto1; 
-    #punto2; 
-    #svgCanvas; 
+    #punto1;
+    #punto2;
+    #svgCanvas;
 
     constructor(svgCanvas, punto1, punto2) {
         this.#svgCanvas = svgCanvas;
@@ -49,19 +49,43 @@ class Linea {
         this.#punto2 = punto2;
     }
 
+    // Algoritmo de Bresenham para dibujar la línea
     draw() {
-        this.#svgCanvas.createElement("line", {
-            x1: this.#punto1.getX(), y1: this.#punto1.getY(), 
-            x2: this.#punto2.getX(), y2: this.#punto2.getY(),
-            stroke: "black", "stroke-width": 1
-        });
+        let x1 = this.#punto1.getX();
+        let y1 = this.#punto1.getY();
+        let x2 = this.#punto2.getX();
+        let y2 = this.#punto2.getY();
+
+        let dx = Math.abs(x2 - x1);
+        let dy = Math.abs(y2 - y1);
+        let sx = (x1 < x2) ? 1 : -1;
+        let sy = (y1 < y2) ? 1 : -1;
+        let err = dx - dy;
+
+        while (true) {
+            // Dibuja un punto en cada posición calculada por Bresenham
+            this.#svgCanvas.createElement("circle", {
+                cx: x1, cy: y1, r: 1, fill: "black"
+            });
+
+            if (x1 === x2 && y1 === y2) break;
+            let e2 = 2 * err;
+            if (e2 > -dy) {
+                err -= dy;
+                x1 += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                y1 += sy;
+            }
+        }
     }
 }
 
 class Circunferencia {
-    #centro; 
-    #radio;  
-    #svgCanvas; 
+    #centro;
+    #radio;
+    #svgCanvas;
 
     constructor(svgCanvas, centro, radio) {
         this.#svgCanvas = svgCanvas;
@@ -78,10 +102,10 @@ class Circunferencia {
 }
 
 class Elipse {
-    #centro; 
-    #rx; 
-    #ry; 
-    #svgCanvas; 
+    #centro;
+    #rx;
+    #ry;
+    #svgCanvas;
 
     constructor(svgCanvas, centro, rx, ry) {
         this.#svgCanvas = svgCanvas;
@@ -92,7 +116,7 @@ class Elipse {
 
     draw() {
         this.#svgCanvas.createElement("ellipse", {
-            cx: this.#centro.getX(), cy: this.#centro.getY(), 
+            cx: this.#centro.getX(), cy: this.#centro.getY(),
             rx: this.#rx, ry: this.#ry,
             stroke: "black", "stroke-width": 1, fill: "none"
         });
@@ -115,7 +139,6 @@ circulo.draw();
 const centroElipse = new Punto(400, 300);
 const elipse = new Elipse(mySVGCanvas, centroElipse, 80, 50);
 elipse.draw();
-
 
 punto1.draw(mySVGCanvas);
 punto2.draw(mySVGCanvas);
